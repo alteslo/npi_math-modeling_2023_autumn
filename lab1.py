@@ -1,32 +1,73 @@
+from typing import Iterable
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
-# Генерируем произвольную выборку
-sample = np.random.normal(loc=5, scale=2, size=1000)
 
-# Выборочное среднее значение
-mean = np.mean(sample)
+def save_data(data: Iterable):
+    with open("data.txt", "w") as file:
+        for item in data:
+            file.write("%s\n" % item)
 
-# Оценка дисперсии
-variance = np.var(sample)
 
-# Создание подграфиков
-fig, (ax1, ax2) = plt.subplots(nrows=2, figsize=(7, 10))
+def get_data():
+    YES, NO, QUIET = "y", "n", "q"
 
-# Построение гистограммы
-ax1.hist(sample, bins=50, density=True, alpha=0.6, color='g')
+    while True:
+        print("Сгенерировать данные для обработки?")
+        choice = input("Если да введите: 'y', если нет введите 'n'\n")
 
-# Построение эмпирического закона случайной величины
-xmin, xmax = plt.xlim()
-x = np.linspace(xmin, xmax, 100)
-p = stats.norm.pdf(x, mean, variance**0.5)
-ax1.plot(x, p, 'k', linewidth=2)
-ax1.set_title("Гистограмма и эмпирический закон случайной величины")
+        if choice == YES:
+            data = np.random.normal(loc=5, scale=2, size=1000)
+            break
+        elif choice == NO:
+            data = input("Введите числа, разделенные пробелами: ").split()
+            data = list(map(float, data))
+            break
+        elif choice == QUIET:
+            return None
+        else:
+            print("Некорректный выбор. Пожалуйста, повторите ввод.")
 
-# Построение статистической функции распределения.
-ax2.plot(x, stats.norm.cdf(x, mean, variance**0.5), 'r', linewidth=2)
-ax2.set_title("Статистическая функция распределения")
+    return data
 
-plt.tight_layout()
-plt.show()
+
+def calculate_stat():
+
+    data = get_data()
+
+    if data is None:
+        return "Вы решили не вводить данные. Программа завершена."
+
+    save_data(data)
+
+    plt.figure(figsize=(20, 10))
+
+    # Вычисление статистических характеристик
+    mean = np.mean(data)    # выборочное среднее
+    variance = np.var(data)  # оценка дисперсии
+
+    # Построение эмпирического закона распределения
+    plt.subplot(131)
+    plt.title('Эмпирический закон случайной величины')
+    xmin, xmax = plt.xlim()
+    x = np.linspace(xmin, xmax, 100)
+    p = stats.norm.pdf(x, mean, variance**0.5)
+    plt.plot(x, p, 'k', linewidth=2)
+
+    # Построение гистограммы
+    plt.subplot(132)
+    plt.title('Гистограмма')
+    plt.hist(data, bins=len(np.unique(data)), edgecolor='black')
+
+    # Построение функции распределения
+    plt.subplot(133)
+    plt.title('Функция распределения')
+    plt.plot(x, stats.norm.cdf(x, mean, variance**0.5), 'r', linewidth=2)
+    plt.show()
+
+    return f"Среднее значение: {mean}" + "\n" + f"Оценка дисперсии: {variance}"
+
+
+if __name__ == "__main__":
+    print(calculate_stat())
