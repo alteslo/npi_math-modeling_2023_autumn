@@ -2,6 +2,14 @@ from typing import Iterable
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
+import pandas as pd
+
+
+"""
+    Необходимо добавить возможность вычисление вероятности попадания исследуемой случайной величины
+X , координаты которых определены ранее. Результаты вычислений свести в таблицу excell, где имя первого столбца "Границы Интервалов", а второго "Теоретические Частоты"
+
+"""
 
 
 def save_data(data: Iterable):
@@ -65,6 +73,18 @@ def calculate_stat():
     # Вычисление статистических характеристик
     mean = np.mean(data)    # выборочное среднее
     variance = np.var(data)  # оценка дисперсии
+
+    # Calculate probabilities
+    # Customize the range and step according to your needs
+    intervals, bins = np.histogram(data, bins='auto')
+    probabilities = stats.norm.cdf(
+        bins[1:], mean, variance**0.5) - stats.norm.cdf(bins[:-1], mean, variance**0.5)
+
+    # Create Excel table
+    table = pd.DataFrame(
+        {"Интервалы": bins[:-1], "Теоретические частоты": probabilities})
+    table.to_excel("results.xlsx", index=False)
+
 
     show_stat_plot(data, mean, variance)
 
