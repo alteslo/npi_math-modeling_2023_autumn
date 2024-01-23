@@ -16,7 +16,7 @@ def get_data():
 
     while True:
         print("Сгенерировать данные для обработки?")
-        choice = input("Если да введите: 'y', если нет введите 'n'\n")
+        choice = input("Если да введите: 'y', если нет введите 'n' или введите 'q' для выхода из программы\n")
 
         if choice == YES:
             data = np.random.normal(loc=5, scale=2, size=1000)
