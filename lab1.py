@@ -1,6 +1,7 @@
 from typing import Iterable
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
 from scipy import stats
 
 
@@ -68,9 +69,11 @@ def calculate_stat():
 
     show_stat_plot(data, mean, variance)
 
-    return (f"Среднее значение: {mean}\n" +
-            f"Оценка дисперсии: {variance}")
+    print(
+        f"Среднее значение: {mean}\n" +
+        f"Оценка дисперсии: {variance}"
+    )
 
 
 if __name__ == "__main__":
-    print(calculate_stat())
+    calculate_stat()

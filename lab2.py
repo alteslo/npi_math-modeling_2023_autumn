@@ -17,11 +17,13 @@ def calculate_stat():
     skewness = skew(data)   # коэффициент асимметрии
     kurt = kurtosis(data)   # эксцесс
 
-    return (f"Среднее значение: {mean}\n" +
-            f"Оценка дисперсии: {variance}\n" +
-            f"Коэффициент асимметрии: {skewness}\n" +
-            f"Эксцесс: {kurt}")
+    print(
+        f"Среднее значение: {mean}\n" +
+        f"Оценка дисперсии: {variance}\n" +
+        f"Коэффициент асимметрии: {skewness}\n" +
+        f"Эксцесс: {kurt}"
+    )
 
 
 if __name__ == "__main__":
-    print(calculate_stat())
+    calculate_stat()
